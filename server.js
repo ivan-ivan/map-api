@@ -38,11 +38,15 @@ app.get('*', (req, res, next) => {
 app.get('/coords/:city', (req, res) => {
     const cityName = req.params.city;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}`;
-     
+    const retrieveCoords = (data) => {
+      return data.results[0].geometry.location;
+    };
+
     fetch(url)
-        .then(data => data.json())
-        .then(data => res.json(data))
-        .catch(error => console.log(error));
+      .then(data => data.json())
+      .then(data => retrieveCoords(data))
+      .then(data => res.json(data))
+      .catch(error => console.log(error));
 });
 
 app.listen(app.get('port'), (error) => {
